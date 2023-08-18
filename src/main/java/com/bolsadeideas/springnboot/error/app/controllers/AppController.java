@@ -1,5 +1,6 @@
 package com.bolsadeideas.springnboot.error.app.controllers;
 
+import com.bolsadeideas.springnboot.error.app.errors.UsuarioNoEncontradoException;
 import com.bolsadeideas.springnboot.error.app.models.domain.Usuario;
 import com.bolsadeideas.springnboot.error.app.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class AppController {
 	@GetMapping("/ver/{id}")
 	public String ver(@PathVariable Integer id, Model model) {
 		Usuario usuario = usuarioService.obtenerPorId(id);
+		if (usuario == null) {
+			throw new UsuarioNoEncontradoException(id.toString());
+		}
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("titulo", "Detalle usuario: ".concat(usuario.getNombre()));
 		return "error/ver";
